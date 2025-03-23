@@ -12,5 +12,10 @@ class RootScreen : ScreenObject
         mainSurface.Print(1, 1, "hellooo :3");
         
         Children.Add(mainSurface);
+
+
+
+        Network.Test();
+
     }
 }
