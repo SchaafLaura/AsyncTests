@@ -13,9 +13,5 @@ class RootScreen : ScreenObject
         
         Children.Add(mainSurface);
 
-
-
-        Network.Test();
-
     }
 }
