@@ -34,7 +34,7 @@ class RootScreen : ControlsConsole
             var k = 0;
             foreach(var c in Children)
                 if (c is FeedSurface f)
-                    f.Task = GetFeed(_feedUrLs[k++]);
+                    f.SetTask(GetFeed(_feedUrLs[k++]));
         };
         Controls.Add(btn);
     }
@@ -43,7 +43,7 @@ class RootScreen : ControlsConsole
     {
         var k = 0;
         foreach (var _ in _feedUrLs)
-            Children.Add(new FeedSurface(GameSettings.GAME_WIDTH - 2, 5, null){ Position = (1, (k++) * 6) });
+            Children.Add(new FeedSurface(GameSettings.GAME_WIDTH - 2, 5){ Position = (1, (k++) * 6) });
     }
 
     public async Task<Feed> GetFeed(string feedURL)
