@@ -46,7 +46,7 @@ class RootScreen : ControlsConsole
             Children.Add(new FeedSurface(GameSettings.GAME_WIDTH - 2, 5){ Position = (1, (k++) * 6) });
     }
 
-    public async Task<Feed> GetFeed(string feedURL)
+    public async Task<Feed?> GetFeed(string feedURL)
     {
         try
         {
@@ -59,13 +59,13 @@ class RootScreen : ControlsConsole
             var t = xmlDoc.GetElementsByTagName("title");
             
             return new Feed(
-                title:  t[0]!.InnerText,
-                newest: t[1]!.InnerText,
-                second: t[2]!.InnerText);
+                Title:  t[0]!.InnerText,
+                Newest: t[1]!.InnerText,
+                Second: t[2]!.InnerText);
         }
         catch (System.Exception e)
         {
-            throw new Exception(e.Message);
+            return null;
         }
     }
 }
