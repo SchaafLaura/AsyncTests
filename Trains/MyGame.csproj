@@ -5,7 +5,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <RootNamespace>Trains</RootNamespace>
+        <RootNamespace>MyRss</RootNamespace>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
