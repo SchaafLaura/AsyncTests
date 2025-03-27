@@ -1,4 +1,6 @@
 ﻿using System.Xml;
+using LanguageExt;
+using LanguageExt.Common;
 using SadConsole.UI;
 using SadConsole.UI.Controls;
 
@@ -12,7 +14,7 @@ class RootScreen : ControlsConsole
     [
         "https://podcastfeeds.nbcnews.com/RPWEjhKq",
         "https://godotengine.org/rss.xml",
-        "https://www.dailymail.co.uk/news/transgender-issues/index.rss",
+        "https://VeryWrongURL.XYZ",
         "https://www.wired.com/feed/rss",
         "https://feeds.content.dowjones.io/public/rss/RSSOpinion",
     ];
@@ -46,7 +48,32 @@ class RootScreen : ControlsConsole
             Children.Add(new FeedSurface(GameSettings.GAME_WIDTH - 2, 5){ Position = (1, (k++) * 6) });
     }
 
-    public async Task<Feed?> GetFeed(string feedURL)
+
+    public async Task<Fin<Feed>> GetFeed(string feedURL)
+    {
+        try
+        {
+            using var response = await _client.GetAsync(new Uri(feedURL));
+            response.EnsureSuccessStatusCode();
+            var body = await response.Content.ReadAsStringAsync();
+
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(body);
+            var t = xmlDoc.GetElementsByTagName("title");
+            
+            return new Feed(
+                Title:  t[0]!.InnerText,
+                Newest: t[1]!.InnerText,
+                Second: t[2]!.InnerText,
+                URL:    feedURL);
+        }
+        catch (System.Exception e)
+        {
+            return Error.New(e.Message + " " + feedURL);
+        }
+    }
+    
+    /*public async Task<Feed?> GetFeed(string feedURL)
     {
         try
         {
@@ -67,5 +94,5 @@ class RootScreen : ControlsConsole
         {
             return null;
         }
-    }
+    }*/
 }

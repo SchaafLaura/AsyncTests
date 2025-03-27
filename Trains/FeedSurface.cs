@@ -1,3 +1,5 @@
+using LanguageExt;
+
 namespace MyRss;
 internal sealed class FeedSurface(int width, int height) : ScreenSurface(width, height)
 {
@@ -26,26 +28,11 @@ internal sealed class FeedSurface(int width, int height) : ScreenSurface(width, 
             _timeSinceLastDraw += delta; 
     }
     
-    public async void SetTask(Task<Feed?>? task)
-    {
-        if (task is null)
-        {
-            WriteFeedToSurface("Failed to Load Feed", "", "");
-            return;
-        }
-
-        var feed = await task;
-
-        if (feed is null)
-        {
-            WriteFeedToSurface("Failed to Load Feed", "", "");
-            return;
-        }
-
-        var feedReal = feed.Value;
-        WriteFeedToSurface(feedReal.Title, feedReal.Newest, feedReal.Second);
-    }
-
+    public async void SetTask(Task<Fin<Feed>> task) =>
+        (await task).Match(
+            feed => WriteFeedToSurface(feed.Title, feed.Newest, feed.Second),
+            err  => WriteFeedToSurface(err.Message, "???", "???"));
+    
     private void WriteFeedToSurface(string title, string newest, string second)
     {
         _written = true;
