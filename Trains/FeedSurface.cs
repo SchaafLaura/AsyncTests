@@ -28,12 +28,11 @@ internal sealed class FeedSurface(int width, int height) : ScreenSurface(width, 
             _timeSinceLastDraw += delta; 
     }
     
-    public async void SetTask(Task<Fin<Feed>> task) =>
+    public async void LoadFeedAsync(Task<Fin<Feed>> task) =>
         (await task).Match(
-            feed => WriteFeedToSurface(feed.Title, feed.Newest, feed.Second),
-            err  => WriteFeedToSurface(err.Message, "???", "???"));
-    
-    private void WriteFeedToSurface(string title, string newest, string second)
+            feed => WriteFeedToSurface(feed.Title.CreateRandomColored(), feed.Newest, feed.Second),
+            err  => WriteFeedToSurface(err.Message.CreateColored(Color.Black, Color.Red), "", ""));
+    private void WriteFeedToSurface(ColoredString title, string newest, string second)
     {
         _written = true;
         Surface.Clear(new Rectangle(0, 0, (_k % 3) + 1, 1));
